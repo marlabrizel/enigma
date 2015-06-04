@@ -1,11 +1,10 @@
-require'pry'
 require '../lib/cracker_calculator'
 
 class Cracker
 
   def initialize(calc)
     @calc = calc
-    @second_rotation =   ["e", "n", "d", "period", "period"]
+    @second_rotation =   [3, 33, 4, 9, 9]
   end
 
   def crack(message)
@@ -22,13 +21,6 @@ class Cracker
     elsif message.length % 4 == 3
         crack_it(3)
     end
-
-      #map focus[0] to the output of h.key((a_offset - 14) % 39)
-      # map focus[1] to the output of h.key((b_offset - 4) % 39)
-      # map focus[2] to the output of h.key((c_offset - 38) % 39)
-      # map focus[3] to the output of h.key((d_offset - 38) % 39)
-      #convert array back to a string then to integers
-    end
   end
 
   def crack_it(rotate_factor, split_piece=(-2))
@@ -40,12 +32,16 @@ class Cracker
     rotated = @second_rotation.rotate(rotate_factor)
     # rotated = @calc.send(second_rotation_for_index(index))
     #rotated = map this to the array [., ., e, n]
-    rotate = (@calc.send(rotation_for_index(index)).to_i - rotated) % 39
-    results.push char_map.key(rotate)
+    finished_rotation = []
+    rotated.each do |num|
+      results.push << char_map.key((@calc.send(rotation_for_index(index)).to_i - num) % 39)
+    end
+    results.join('')
+    end
   end
 
   def second_rotation_for_index(idx)
-    ["e", "n", "d", "period", "period"][idx]
+    [5, 14, 4, 38, 38][idx]
     #be sure to index in here with a range to pop extra element
   end
 
