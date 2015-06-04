@@ -1,66 +1,27 @@
+require'pry'
 require '../lib/cracker_calculator'
 
 class Cracker
 
   def initialize(calc)
     @calc = calc
+    @second_rotation =   ["e", "n", "d", "period", "period"]
   end
 
   def crack(message)
+    @message = message
     if message.length % 4 == 0
-      split_message = message.split('').each_slice(4).to_a
-      #here is the array of arrays
-      focus = split_message[-1]
-      results = []
-      focus.each_with_index do |char, index|
-        rotated = focus.rotate(1)
-        value = rotated.pop
-        value = @calc.send(second_rotation_for_index(index))
-        #value = map this to the array [n, d, ., .]
-        rotate = (@calc.send(rotation_for_index(index)).to_i - value) % 39
-        results.push char_map.key(rotate)
-      end
+      crack_it(1, -1)
 
     elsif message.length % 4 == 1
-      split_message = message.split('').each_slice(4).to_a
-      #here is the array of arrays
-      focus = split_message[-2]
-      results = []
-      focus.each_with_index do |char, index|
-        value = focus.pop
-        value = @calc.send(second_rotation_for_index(index))
-        #value = map this to the array [e, n, d, .]
-        rotate = (@calc.send(rotation_for_index(index)).to_i - value) % 39
-        results.push char_map.key(rotate)
-      end
+      crack_it(0)
 
     elsif message.length % 4 == 2
-      split_message = message.split('').each_slice(4).to_a
-      #here is the array of arrays
-      focus = split_message[-2]
-      results = []
-      focus.each_with_index do |char, index|
-        rotated = focus.rotate(4)
-        value = rotated.pop
-        value = @calc.send(second_rotation_for_index(index))
-        #value = map this to the array [., e, n, d]
-        rotate = (@calc.send(rotation_for_index(index)).to_i - value) % 39
-        results.push char_map.key(rotate)
-      end
+        crack_it(4)
 
     elsif message.length % 4 == 3
-      split_message = message.split('').each_slice(4).to_a
-      #here is the array of arrays
-      focus = split_message[-2]
-      results = []
-      focus.each_with_index do |char, index|
-        rotated = focus.rotate(3)
-        value = rotated.pop
-        value = @calc.send(second_rotation_for_index(index))
-        #value = map this to the array [., ., e, n]
-        rotate = (@calc.send(rotation_for_index(index)).to_i - value) % 39
-        results.push char_map.key(rotate)
-      end
+        crack_it(3)
+    end
 
       #map focus[0] to the output of h.key((a_offset - 14) % 39)
       # map focus[1] to the output of h.key((b_offset - 4) % 39)
@@ -68,6 +29,19 @@ class Cracker
       # map focus[3] to the output of h.key((d_offset - 38) % 39)
       #convert array back to a string then to integers
     end
+  end
+
+  def crack_it(rotate_factor, split_piece=(-2))
+  split_message = @message.split('').each_slice(4).to_a
+  #here is the array of arrays
+  focus = split_message[split_piece]
+  results = []
+  focus.each_with_index do |char, index|
+    rotated = @second_rotation.rotate(rotate_factor)
+    # rotated = @calc.send(second_rotation_for_index(index))
+    #rotated = map this to the array [., ., e, n]
+    rotate = (@calc.send(rotation_for_index(index)).to_i - rotated) % 39
+    results.push char_map.key(rotate)
   end
 
   def second_rotation_for_index(idx)
