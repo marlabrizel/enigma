@@ -1,4 +1,4 @@
-require '../lib/calculator'
+require '../lib/calculator.rb'
 require'pry'
 
 class Decryptor
