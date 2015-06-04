@@ -9,10 +9,10 @@ class OutgoingFile
     @encrypted_file = encrypted_file
   end
 
-  def create_file(encrypted_message)
+  def encrypt_file(encrypted_message)
     writer = File.open(@encrypted_file, 'w')
     writer.write(encrypted_message)
-      #make sure you close the file
+    writer.close
   end
 
 end
