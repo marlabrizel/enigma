@@ -13,15 +13,15 @@ class Encryptor
   def encrypt(message)
     split_message = message.split('').each_slice(4).to_a
     out_message = split_message.map do |item|
-      res = []
+      results = []
       item.each_with_index do |char, index|
-        v = char_map.fetch(char) # => value
+        value = char_map.fetch(char) # => value
         # first evaaaa metaprogramming!!!!
-        r = (v + @calc.send(rotation_for_index(index))) % 39
-        res.push char_map.key(r)
+        rotate = (value + @calc.send(rotation_for_index(index))) % 39
+        results.push char_map.key(rotate)
       end
-      puts "res", res
-      res.join("")
+      # puts "res", res
+      results.join("")
     end
     out_message.join("")
     #split message into arrays of four characters- each_slice(4)
