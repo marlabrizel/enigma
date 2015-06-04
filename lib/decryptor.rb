@@ -12,14 +12,14 @@ class Decryptor
   def decrypt(message)
     split_message = message.split('').each_slice(4).to_a
     out_message = split_message.map do |item|
-      res = []
+      results = []
       item.each_with_index do |char, index|
-        v = char_map.fetch(char) # => value
-        r = (v - @calc.send(rotation_for_index(index))) % 39
-        res.push char_map.key(r)
+        value = char_map.fetch(char) # => value
+        rotate = (value - @calc.send(rotation_for_index(index))) % 39
+        results.push char_map.key(rotate)
       end
-      puts "res", res
-      res.join("")
+      # puts "results", results
+      results.join("")
     end
     out_message.join("")
   end
