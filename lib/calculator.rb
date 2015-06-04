@@ -4,6 +4,7 @@ require 'pry'
 class Calculator
 
   attr_reader :today
+  attr_accessor :key
 
   def initialize(today_str, key)
     @today = today_str
@@ -45,13 +46,19 @@ end
 # so, what if you created an array where each two of the key values got reduced
 # into a single value (the key part of the computation)
 # and another array where you took the date, reversed it.
-# 
+#
 # Jed Schneider [1:30 PM]
 # and zipped those two together?
 
 if __FILE__ == $0
  a_offset = Calculator.new(@today, Generator.new.generate_key).a_final
  puts a_offset
+ b_offset = Calculator.new(@today, Generator.new.generate_key).b_final
+ puts b_offset
+ c_offset = Calculator.new(@today, Generator.new.generate_key).c_final
+ puts c_offset
+ d_offset = Calculator.new(@today, Generator.new.generate_key).d_final
+ puts d_offset
 end
 
 # From your runner, create an instance of an offset calculator
